@@ -75,7 +75,7 @@ class ViewController: UIViewController,MessageManagerDelegate,MultiConnectManage
     }
     
     func didMultiConnectConnectPeersCountChanges(count:Int){
-//        self.title = 
+        self.connectedCount = count
     }
     func didMultiConnectSendMessage(message:String){}
     func didMultiConnectReceivedMessage(message:String){}
