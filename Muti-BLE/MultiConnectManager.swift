@@ -23,10 +23,10 @@ extension MCSessionState {
 }
 
 protocol MultiConnectManagerDelegate {
-    func didPeerChangeState(peer:MCPeerID,state: MCSessionState)
-    func didConnectPeersCountChanges(count:Int)
-    func didSendMessage(message:String)
-    func didReceivedMessage(message:String)
+    func didMultiConnectPeerChangeState(peer:MCPeerID,state: MCSessionState)
+    func didMultiConnectConnectPeersCountChanges(count:Int)
+    func didMultiConnectSendMessage(message:String)
+    func didMultiConnectReceivedMessage(message:String)
     func didMultiConnectError(error:NSError)
 }
 
@@ -94,7 +94,6 @@ class MultiConnectManager: NSObject {
         }
         
         self.send(["message":string,"peers":peers], peers: self.session.connectedPeers)
-        
     }
     
     //message:["message":"","peers":[peer.displayname]]
@@ -110,6 +109,10 @@ class MultiConnectManager: NSObject {
         }
         catch{
             self.logDelegate?.didLog("\(error)");
+            return
+        }
+        if let m = message["message"] as? String{
+            self.delegate?.didMultiConnectSendMessage(m)
         }
 
     }
@@ -160,14 +163,17 @@ extension MultiConnectManager : MCSessionDelegate {
         self.logDelegate?.didLog(s)
         self.logDelegate?.didLog(s)
     
-        self.delegate?.didPeerChangeState(peerID, state: state)
-        self.delegate?.didConnectPeersCountChanges(self.session.connectedPeers.count)
+        self.delegate?.didMultiConnectPeerChangeState(peerID, state: state)
+        self.delegate?.didMultiConnectConnectPeersCountChanges(self.session.connectedPeers.count)
     }
     
     func session(session: MCSession, didReceiveData data: NSData, fromPeer peerID: MCPeerID) {
 
         if let dict:NSDictionary = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [String:AnyObject]{
             let s = "didReceiveData: \(dict["message"])"
+            if let m = dict["message"] as? String{
+                self.delegate?.didMultiConnectReceivedMessage(m)
+            }
             self.logDelegate?.didLog("dict:\(dict)")
             self.logDelegate?.didLog(s)
 //            self.logDelegate?.didLog(s)

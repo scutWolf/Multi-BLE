@@ -7,11 +7,10 @@
 //
 
 import UIKit
+import MultipeerConnectivity
 
 
-
-
-class ViewController: UIViewController,MessageManagerDelegate {
+class ViewController: UIViewController,MessageManagerDelegate,MultiConnectManagerDelegate {
 
     @IBOutlet var firstTextView: UITextView!
 //    @IBOutlet var secondTextView: UITextView!
@@ -19,12 +18,18 @@ class ViewController: UIViewController,MessageManagerDelegate {
     var manager:MultiConnectManager?
     
     var adString:String = ""
-    
     var broString:String = ""
-    
+    var connectedCount = 0 {
+        didSet{
+            dispatch_async(dispatch_get_main_queue()) {
+                self.title = "已连接：\(self.connectedCount)个"
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.connectedCount = 0
         // Do any additional setup after loading the view, typically from a nib.
         
         self.manager = MultiConnectManager()
@@ -64,7 +69,16 @@ class ViewController: UIViewController,MessageManagerDelegate {
 //            self.secondTextView.text = self.broString
 //        }
 //    }
+    func didMultiConnectPeerChangeState(peer:MCPeerID,state: MCSessionState){
     
+    }
+    
+    func didMultiConnectConnectPeersCountChanges(count:Int){
+//        self.title = 
+    }
+    func didMultiConnectSendMessage(message:String){}
+    func didMultiConnectReceivedMessage(message:String){}
+    func didMultiConnectError(error:NSError){}
 
 
 
