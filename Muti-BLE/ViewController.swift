@@ -34,6 +34,7 @@ class ViewController: UIViewController,MessageManagerDelegate,MultiConnectManage
         
         self.manager = MultiConnectManager()
         manager!.logDelegate = self
+        manager!.delegate = self
         manager!.start()
         
     }
