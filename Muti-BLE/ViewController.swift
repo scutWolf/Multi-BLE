@@ -14,7 +14,7 @@ import UIKit
 class ViewController: UIViewController,MessageManagerDelegate {
 
     @IBOutlet var firstTextView: UITextView!
-    @IBOutlet var secondTextView: UITextView!
+//    @IBOutlet var secondTextView: UITextView!
     
     var manager:MultiConnectManager?
     

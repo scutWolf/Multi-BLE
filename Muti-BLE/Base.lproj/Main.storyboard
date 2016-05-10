@@ -14,17 +14,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Tcj-D7-XpT"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="qv8-yz-RYw">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="iYq-Gg-rT8">
-                                <rect key="frame" x="16" y="82" width="288" height="218.5"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XWE-BI-wcv">
-                                <rect key="frame" x="16" y="329.5" width="288" height="218.5"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="iYq-Gg-rT8">
+                                <rect key="frame" x="16" y="82" width="288" height="466"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -34,12 +28,8 @@
                         <constraints>
                             <constraint firstAttribute="leadingMargin" secondItem="iYq-Gg-rT8" secondAttribute="leading" id="5IU-se-gsa"/>
                             <constraint firstAttribute="trailingMargin" secondItem="iYq-Gg-rT8" secondAttribute="trailing" id="APw-hS-v5c"/>
-                            <constraint firstItem="XWE-BI-wcv" firstAttribute="height" secondItem="iYq-Gg-rT8" secondAttribute="height" id="LLW-gd-xAb"/>
-                            <constraint firstItem="Tcj-D7-XpT" firstAttribute="top" secondItem="XWE-BI-wcv" secondAttribute="bottom" constant="20" id="Qgy-0C-1sj"/>
-                            <constraint firstItem="XWE-BI-wcv" firstAttribute="top" secondItem="iYq-Gg-rT8" secondAttribute="bottom" constant="29" id="XE8-Ev-3jZ"/>
+                            <constraint firstItem="Tcj-D7-XpT" firstAttribute="top" secondItem="iYq-Gg-rT8" secondAttribute="bottom" constant="20" id="Hn4-82-ILu"/>
                             <constraint firstItem="iYq-Gg-rT8" firstAttribute="top" secondItem="HEl-4d-ceK" secondAttribute="bottom" constant="18" id="cec-pR-8PR"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="XWE-BI-wcv" secondAttribute="trailing" id="kAj-nh-DxF"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="XWE-BI-wcv" secondAttribute="leading" id="tGm-AS-AoP"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="66h-Jp-ac9">
@@ -56,7 +46,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="firstTextView" destination="iYq-Gg-rT8" id="ccK-pd-HtC"/>
-                        <outlet property="secondTextView" destination="XWE-BI-wcv" id="iOI-hN-mh0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YnB-6e-Eht" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -68,7 +57,8 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dnA-FR-nQa" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="leG-G4-ojk">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="leG-G4-ojk">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
