@@ -270,7 +270,7 @@
      *
      *  Show a timestamp for every 3rd message
      */
-    if (indexPath.item % 3 == 0) {
+    if (indexPath.item % 4 == 0) {
         return kJSQMessagesCollectionViewCellLabelHeightDefault;
     }
     
@@ -384,17 +384,17 @@
 }
 
 -(void)didMultiConnectAlert:(NSString *)alert{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        JSQMessage *message = [[JSQMessage alloc] initWithSenderId:self.uuid
-                                                 senderDisplayName:self.displayName
-                                                              date:[NSDate date]
-                                                              text:[NSString stringWithFormat:@"log: %@",alert]];
-        
-        [self.messages addObject:message];
-        
-        [self finishSendingMessageAnimated:YES];
-    
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        JSQMessage *message = [[JSQMessage alloc] initWithSenderId:self.uuid
+//                                                 senderDisplayName:self.displayName
+//                                                              date:[NSDate date]
+//                                                              text:[NSString stringWithFormat:@"log: %@",alert]];
+//        
+//        [self.messages addObject:message];
+//        
+//        [self finishSendingMessageAnimated:YES];
+//    
+//    });
 }
 
 -(void)didMultiConnectConnectPeersCountChanges:(NSInteger)count{
