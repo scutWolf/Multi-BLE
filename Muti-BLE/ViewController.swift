@@ -10,7 +10,7 @@ import UIKit
 import MultipeerConnectivity
 
 
-class ViewController: UIViewController,MessageManagerDelegate,MultiConnectManagerDelegate {
+class ViewController: UIViewController,MultiConnectManagerDelegate {
 
     @IBOutlet var firstTextView: UITextView!
 //    @IBOutlet var secondTextView: UITextView!
@@ -32,8 +32,8 @@ class ViewController: UIViewController,MessageManagerDelegate,MultiConnectManage
         self.connectedCount = 0
         // Do any additional setup after loading the view, typically from a nib.
         
-        self.manager = MultiConnectManager()
-        manager!.logDelegate = self
+        self.manager = MultiConnectManager(displayName: UIDevice.currentDevice().name,uuid:"")
+//        manager!.logDelegate = self
         manager!.delegate = self
         manager!.start()
         
@@ -78,10 +78,15 @@ class ViewController: UIViewController,MessageManagerDelegate,MultiConnectManage
         self.connectedCount = count
     }
     func didMultiConnectSendMessage(message:String){}
-    func didMultiConnectReceivedMessage(message:String){}
+//    func didMultiConnectReceivedMessage(message:String, peer:String){}
     func didMultiConnectError(error:NSError){}
+    func didMultiConnectReceivedMessage(message: String, displayName: String, uuid: String) {
+        
+    }
 
-
+    func didMultiConnectAlert(alert: String) {
+        
+    }
 
 }
 

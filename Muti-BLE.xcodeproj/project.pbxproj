@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		798C46071CE20A760025F9C8 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 798C46061CE20A760025F9C8 /* MultipeerConnectivity.framework */; };
+		79B67A1B1CF2B4DA001D9415 /* BleChattingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79B67A1A1CF2B4DA001D9415 /* BleChattingViewController.m */; };
 		79C2ED2B1CD89DAC00E57BE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C2ED2A1CD89DAC00E57BE7 /* AppDelegate.swift */; };
 		79C2ED2D1CD89DAC00E57BE7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C2ED2C1CD89DAC00E57BE7 /* ViewController.swift */; };
 		79C2ED301CD89DAC00E57BE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79C2ED2E1CD89DAC00E57BE7 /* Main.storyboard */; };
@@ -21,6 +22,8 @@
 		670EC8A1CFCB10D91BE8C241 /* libPods-Muti-BLE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Muti-BLE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		798C46061CE20A760025F9C8 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		79B063D31CE0BCD80030AC1F /* Muti-BLE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Muti-BLE-Bridging-Header.h"; sourceTree = "<group>"; };
+		79B67A191CF2B4DA001D9415 /* BleChattingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BleChattingViewController.h; sourceTree = "<group>"; };
+		79B67A1A1CF2B4DA001D9415 /* BleChattingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BleChattingViewController.m; sourceTree = "<group>"; };
 		79C2ED271CD89DAC00E57BE7 /* Muti-BLE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Muti-BLE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		79C2ED2A1CD89DAC00E57BE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		79C2ED2C1CD89DAC00E57BE7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +78,8 @@
 				79C2ED331CD89DAC00E57BE7 /* LaunchScreen.storyboard */,
 				79C2ED361CD89DAC00E57BE7 /* Info.plist */,
 				79B063D31CE0BCD80030AC1F /* Muti-BLE-Bridging-Header.h */,
+				79B67A191CF2B4DA001D9415 /* BleChattingViewController.h */,
+				79B67A1A1CF2B4DA001D9415 /* BleChattingViewController.m */,
 			);
 			path = "Muti-BLE";
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 			files = (
 				79C2ED2D1CD89DAC00E57BE7 /* ViewController.swift in Sources */,
 				79C2ED2B1CD89DAC00E57BE7 /* AppDelegate.swift in Sources */,
+				79B67A1B1CF2B4DA001D9415 /* BleChattingViewController.m in Sources */,
 				79C2ED3D1CD89E0300E57BE7 /* MultiConnectManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

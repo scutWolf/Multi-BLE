@@ -4,7 +4,7 @@
 target 'Muti-BLE' do
 
 pod 'JSQMessagesViewController'
-
+pod 'MBProgressHUD'
 
 end
 

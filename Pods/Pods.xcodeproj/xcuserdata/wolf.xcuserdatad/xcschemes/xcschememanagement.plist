@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>MBProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Muti-BLE.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,17 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1C6B245D98581796716BCA5ECBF691C6</key>
+		<key>12367FAEAB1806F5819C64B0F7097C26</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2F9D757B0D08932AF09A017D73603694</key>
+		<key>2CCEB1AF97E78259AE7F42837A92B323</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F9044B1BB83B5B97AFC78933F5E976B7</key>
+		<key>4AED5D4E1DC045A205EBA633B7A1A061</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>58621CC30AD03CDC3F100EDFDD202EB5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
