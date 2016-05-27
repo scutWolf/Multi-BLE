@@ -8,18 +8,24 @@
 
 #import "BleChattingViewController.h"
 #import "MBProgressHUD.h"
+#import "Muti_BLE-Swift.h"
 
-@interface BleChattingViewController ()
+@interface BleChattingViewController ()<MultiConnectManagerDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,PeerListDelegate>
 
 @property (strong,nonatomic) NSMutableArray *messages;
-@property (assign,nonatomic) int connectedCount;
+@property (assign,nonatomic) NSInteger connectedCount;
 @property (strong,nonatomic) MultiConnectManager *manager;
 @property (strong,nonatomic) NSString *displayName;
 @property (strong,nonatomic) NSString *uuid;
-
+//@property (strong,nonatomic) NSString
+@property (assign,nonatomic) bool isSingleChatting;
+@property (strong,nonatomic) NSString *charttingTarget;
+@property (assign,nonatomic) bool targetExist;
+@property (strong,nonatomic) NSString *inviteString;
 @end
 
 @implementation BleChattingViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -28,7 +34,7 @@
     self.connectedCount = 0 ;
 
     self.uuid = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).uuid;
-    self.displayName = [[UIDevice currentDevice] name];
+    self.displayName = ((AppDelegate *)[[UIApplication sharedApplication] delegate]).chattingUserName;
     
     self.senderId = self.uuid;
     self.senderDisplayName = self.displayName;
@@ -36,11 +42,16 @@
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
 
-    self.inputToolbar.contentView.leftBarButtonItem = nil;
+//    self.inputToolbar.contentView.leftBarButtonItem = nil;
     
-    self.manager = [[MultiConnectManager alloc]initWithDisplayName:self.displayName uuid:self.uuid];
+    if (!self.roomName){
+        self.roomName = @"Default";
+    }
+    NSString *serviceType = [NSString stringWithFormat:@"mulple-%lu",self.roomName.hash%10000];
+    
+    self.manager = [[MultiConnectManager alloc]initWithDisplayName:self.displayName uuid:self.uuid serviceType:serviceType];
     self.manager.delegate = self;
-    [self.manager start];
+//    [self.manager start];
     
     
     /**
@@ -48,6 +59,18 @@
      */
     [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
     
+    
+
+    
+}
+
+-(NSString *)inviteString{
+    return @"邀请你进入单聊。";
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    self.manager = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -62,16 +85,71 @@
     return _messages;
 }
 
--(void)setConnectedCount:(int)connectedCount{
+-(void)setConnectedCount:(NSInteger)connectedCount{
 //
 //    dispatch_async(dispatch_get_main_queue()) {
 //        self.title = "已连接：\(self.connectedCount)个"
 //    }
-//    
+//
+    _connectedCount = connectedCount;
+    if (_isSingleChatting){
+        return ;
+    }
+    
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-       self.title = [NSString stringWithFormat:@"已连接:%d人",connectedCount];
+       self.title = [NSString stringWithFormat:@"%@（%ld）",self.roomName,connectedCount];
     });
 }
+
+-(void)setIsSingleChatting:(bool)isSingleChatting{
+    _isSingleChatting = isSingleChatting;
+    if (isSingleChatting){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.title = self.charttingTarget;
+            self.targetExist = _targetExist;
+        });
+        [self removeAll];
+
+    }
+    else{
+        self.charttingTarget = nil;
+        self.connectedCount = _connectedCount;
+        [self removeAll];
+        
+    }
+}
+
+-(void)setTargetExist:(bool)targetExist{
+    _targetExist = targetExist;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.title = [NSString stringWithFormat:@"%@(已断开连接)",self.charttingTarget];
+    });
+}
+
+-(void)removeAll{
+    NSInteger count = self.messages.count;
+    [self.messages removeAllObjects];
+    NSMutableArray *array = [NSMutableArray array];
+    for (int i=0;i<count;i++){
+        [array addObject:([NSIndexPath indexPathForRow:i inSection:0])];
+    }
+    [self.collectionView deleteItemsAtIndexPaths:array];
+}
+
+-(void)sendImage:(UIImage *)image{
+    id<JSQMessageMediaData> newMediaData = [[JSQPhotoMediaItem alloc]initWithImage:image];
+    JSQMessage *newMessage = [JSQMessage messageWithSenderId:self.uuid
+                                                 displayName:self.displayName
+                                                       media:newMediaData];
+    
+    [self.messages addObject:newMessage];
+    
+//    [self.manager sendNewMessage:text];
+    
+    [self finishSendingMessageAnimated:YES];
+}
+
 
 /*
 #pragma mark - Navigation
@@ -107,8 +185,12 @@
     
     [self.messages addObject:message];
     
-    [self.manager sendNewMessage:text];
-    
+    if (!self.isSingleChatting){
+        [self.manager sendNewMessage:text];
+    }
+    else{
+        [self.manager sendPrivateMessage:text target:self.charttingTarget];
+    }
     
     [self finishSendingMessageAnimated:YES];
 }
@@ -124,6 +206,9 @@
 //                                              otherButtonTitles:@"Send photo", @"Send location", @"Send video", @"Send audio", nil];
 //    
 //    [sheet showFromToolbar:self.inputToolbar];
+    
+    [self showImagePickerWithSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    
 }
 
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -320,31 +405,46 @@
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"Tapped message bubble!");
+    
+    JSQMessage *message = self.messages[indexPath.row];
+    if ([message.text isEqualToString:self.inviteString] && message.senderId != self.senderId){
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"邀请单聊" message:@"是否单聊？" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"加入" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+            [self joinPivateChatting:[MultiConnectManager peerName:message.senderDisplayName uuid:message.senderId]];
+            
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+    
 }
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView didTapCellAtIndexPath:(NSIndexPath *)indexPath touchLocation:(CGPoint)touchLocation
 {
     NSLog(@"Tapped cell at %@!", NSStringFromCGPoint(touchLocation));
 }
-
-#pragma mark - JSQMessagesComposerTextViewPasteDelegate methods
-
-
-- (BOOL)composerTextView:(JSQMessagesComposerTextView *)textView shouldPasteWithSender:(id)sender
-{
-    if ([UIPasteboard generalPasteboard].image) {
-        // If there's an image in the pasteboard, construct a media item with that image and `send` it.
-        JSQPhotoMediaItem *item = [[JSQPhotoMediaItem alloc] initWithImage:[UIPasteboard generalPasteboard].image];
-        JSQMessage *message = [[JSQMessage alloc] initWithSenderId:self.senderId
-                                                 senderDisplayName:self.senderDisplayName
-                                                              date:[NSDate date]
-                                                             media:item];
-        [self.messages addObject:message];
-        [self finishSendingMessage];
-        return NO;
-    }
-    return YES;
-}
+//
+//#pragma mark - JSQMessagesComposerTextViewPasteDelegate methods
+//
+//
+//- (BOOL)composerTextView:(JSQMessagesComposerTextView *)textView shouldPasteWithSender:(id)sender
+//{
+////    if ([UIPasteboard generalPasteboard].image) {
+////        // If there's an image in the pasteboard, construct a media item with that image and `send` it.
+////        JSQPhotoMediaItem *item = [[JSQPhotoMediaItem alloc] initWithImage:[UIPasteboard generalPasteboard].image];
+////        JSQMessage *message = [[JSQMessage alloc] initWithSenderId:self.senderId
+////                                                 senderDisplayName:self.senderDisplayName
+////                                                              date:[NSDate date]
+////                                                             media:item];
+////        [self.messages addObject:message];
+////        [self finishSendingMessage];
+////        return NO;
+////    }
+////    return YES;
+//}
 
 #pragma mark - message delegate 
 
@@ -356,15 +456,32 @@
     //success
 }
 
-//-(void)didMultiConnectReceivedMessage:(NSString *)message disp{
-
-//}
 
 -(void)didMultiConnectReceivedMessage:(NSString *)message displayName:(NSString *)displayName uuid:(NSString *)uuid{
     
+    if (self.isSingleChatting){
+        return;
+    }
     
     self.showTypingIndicator = !self.showTypingIndicator;
 
+    [self scrollToBottomAnimated:YES];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        JSQMessage *newMessage = [[JSQMessage alloc] initWithSenderId:uuid
+                                                    senderDisplayName:displayName
+                                                                 date:[NSDate date]
+                                                                 text:message];
+        [JSQSystemSoundPlayer jsq_playMessageReceivedSound];
+        [self.messages addObject:newMessage];
+        [self finishReceivingMessageAnimated:YES];
+    });
+
+}
+
+-(void)didMultiConnectReceivedPrivateMessage:(NSString *)message displayName:(NSString *)displayName uuid:(NSString *)uuid{
+    self.showTypingIndicator = !self.showTypingIndicator;
+    
     [self scrollToBottomAnimated:YES];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -401,6 +518,99 @@
     self.connectedCount = count;
 }
 
+-(void)didMultiConnectSharePeersChanged:(NSArray<NSString *> *)peers{
+    if (self.isSingleChatting){
+        bool exist = NO;
+        for (NSString *peer in peers){
+            if ([peer isEqualToString:self.charttingTarget]){
+                exist = YES;
+            }
+        }
+        self.targetExist = exist;
+    }
+}
+
+#pragma mark - image picker methods
+
+- (void)showImagePickerWithSourceType:(UIImagePickerControllerSourceType)sourceType{
+    
+    UIImagePickerController *picker = [[UIImagePickerController alloc]init];
+    picker.sourceType = sourceType;
+    picker.delegate = self;
+    picker.allowsEditing = NO;
+    
+    
+    [self presentViewController:picker animated:YES completion:nil];
+    
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+    
+    
+    //获得编辑过的图片
+    UIImage* image = [info objectForKey: @"UIImagePickerControllerOriginalImage"];
+    
+    //    [self uploadImage:image];
+    [self sendImage:image];
+    
+    [self dismissImagePickerController:picker];
+    
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo{
+    
+    //    [self uploadImage:image];
+    [self sendImage:image];
+    
+    [self dismissImagePickerController:picker];
+    
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    
+    [self dismissImagePickerController:picker];
+    
+}
+
+- (void)dismissImagePickerController:(UIImagePickerController *)picker
+{
+//    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - peer list deleagte
+
+
+-(void)didPeerListStartSingleChatting:(NSString *)target{
+
+    [self joinPivateChatting:target];
+    [self.manager sendPrivateMessage:self.inviteString target:self.charttingTarget];
+}
+
+-(void)joinPivateChatting:(NSString *)target{
+    self.charttingTarget = target;
+    self.isSingleChatting = YES;
+    
+    if (self.isSingleChatting){
+        bool exist = NO;
+        for (NSString *peer in self.manager.allPeers){
+            if ([peer isEqualToString:self.charttingTarget]){
+                exist = YES;
+            }
+        }
+        self.targetExist = exist;
+    }
+}
+
+#pragma  mark - segue
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
+    if ([segue.destinationViewController isKindOfClass:[PeersListTableViewController class]]){
+        PeersListTableViewController *controller = segue.destinationViewController;
+        [controller configurePeers:self.manager.allPeers];
+        controller.delegate = self;
+    }
+
+}
 
 
 

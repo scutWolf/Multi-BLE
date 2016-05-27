@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "JSQMessagesViewController.h"
 #import "JSQMessages.h"
-#import "Muti_BLE-Swift.h"
 
-@interface BleChattingViewController : JSQMessagesViewController<UIActionSheetDelegate, JSQMessagesComposerTextViewPasteDelegate,MultiConnectManagerDelegate>
+@interface BleChattingViewController : JSQMessagesViewController<UIActionSheetDelegate>
+
+@property (strong,nonatomic) NSString *roomName;
 
 @end

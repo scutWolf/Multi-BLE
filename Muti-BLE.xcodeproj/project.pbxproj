@@ -7,10 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		79319D201CF7E31100B47559 /* ChattingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79319D1F1CF7E31100B47559 /* ChattingListTableViewController.swift */; };
+		79319D221CF7E5F500B47559 /* ChattingRoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79319D211CF7E5F500B47559 /* ChattingRoomTableViewCell.swift */; };
+		79319D241CF7EF7400B47559 /* ScreenSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79319D231CF7EF7400B47559 /* ScreenSize.swift */; };
+		79319D2C1CF7FD6600B47559 /* MoreDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79319D2B1CF7FD6600B47559 /* MoreDetailTableViewController.swift */; };
+		79319D2E1CF8355C00B47559 /* PeersListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79319D2D1CF8355C00B47559 /* PeersListTableViewController.swift */; };
+		79319D301CF8357500B47559 /* PeersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79319D2F1CF8357500B47559 /* PeersTableViewCell.swift */; };
 		798C46071CE20A760025F9C8 /* MultipeerConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 798C46061CE20A760025F9C8 /* MultipeerConnectivity.framework */; };
 		79B67A1B1CF2B4DA001D9415 /* BleChattingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79B67A1A1CF2B4DA001D9415 /* BleChattingViewController.m */; };
 		79C2ED2B1CD89DAC00E57BE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C2ED2A1CD89DAC00E57BE7 /* AppDelegate.swift */; };
-		79C2ED2D1CD89DAC00E57BE7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C2ED2C1CD89DAC00E57BE7 /* ViewController.swift */; };
 		79C2ED301CD89DAC00E57BE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79C2ED2E1CD89DAC00E57BE7 /* Main.storyboard */; };
 		79C2ED321CD89DAC00E57BE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79C2ED311CD89DAC00E57BE7 /* Assets.xcassets */; };
 		79C2ED351CD89DAC00E57BE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79C2ED331CD89DAC00E57BE7 /* LaunchScreen.storyboard */; };
@@ -20,13 +25,18 @@
 
 /* Begin PBXFileReference section */
 		670EC8A1CFCB10D91BE8C241 /* libPods-Muti-BLE.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Muti-BLE.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		79319D1F1CF7E31100B47559 /* ChattingListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChattingListTableViewController.swift; sourceTree = "<group>"; };
+		79319D211CF7E5F500B47559 /* ChattingRoomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChattingRoomTableViewCell.swift; sourceTree = "<group>"; };
+		79319D231CF7EF7400B47559 /* ScreenSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenSize.swift; sourceTree = "<group>"; };
+		79319D2B1CF7FD6600B47559 /* MoreDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreDetailTableViewController.swift; sourceTree = "<group>"; };
+		79319D2D1CF8355C00B47559 /* PeersListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeersListTableViewController.swift; sourceTree = "<group>"; };
+		79319D2F1CF8357500B47559 /* PeersTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeersTableViewCell.swift; sourceTree = "<group>"; };
 		798C46061CE20A760025F9C8 /* MultipeerConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MultipeerConnectivity.framework; path = System/Library/Frameworks/MultipeerConnectivity.framework; sourceTree = SDKROOT; };
 		79B063D31CE0BCD80030AC1F /* Muti-BLE-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Muti-BLE-Bridging-Header.h"; sourceTree = "<group>"; };
 		79B67A191CF2B4DA001D9415 /* BleChattingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BleChattingViewController.h; sourceTree = "<group>"; };
 		79B67A1A1CF2B4DA001D9415 /* BleChattingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BleChattingViewController.m; sourceTree = "<group>"; };
 		79C2ED271CD89DAC00E57BE7 /* Muti-BLE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Muti-BLE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		79C2ED2A1CD89DAC00E57BE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		79C2ED2C1CD89DAC00E57BE7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		79C2ED2F1CD89DAC00E57BE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		79C2ED311CD89DAC00E57BE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		79C2ED341CD89DAC00E57BE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -70,16 +80,21 @@
 		79C2ED291CD89DAC00E57BE7 /* Muti-BLE */ = {
 			isa = PBXGroup;
 			children = (
+				79319D231CF7EF7400B47559 /* ScreenSize.swift */,
+				79C2ED331CD89DAC00E57BE7 /* LaunchScreen.storyboard */,
+				79C2ED2E1CD89DAC00E57BE7 /* Main.storyboard */,
 				79C2ED2A1CD89DAC00E57BE7 /* AppDelegate.swift */,
 				79C2ED3C1CD89E0300E57BE7 /* MultiConnectManager.swift */,
-				79C2ED2C1CD89DAC00E57BE7 /* ViewController.swift */,
-				79C2ED2E1CD89DAC00E57BE7 /* Main.storyboard */,
 				79C2ED311CD89DAC00E57BE7 /* Assets.xcassets */,
-				79C2ED331CD89DAC00E57BE7 /* LaunchScreen.storyboard */,
 				79C2ED361CD89DAC00E57BE7 /* Info.plist */,
 				79B063D31CE0BCD80030AC1F /* Muti-BLE-Bridging-Header.h */,
 				79B67A191CF2B4DA001D9415 /* BleChattingViewController.h */,
 				79B67A1A1CF2B4DA001D9415 /* BleChattingViewController.m */,
+				79319D211CF7E5F500B47559 /* ChattingRoomTableViewCell.swift */,
+				79319D1F1CF7E31100B47559 /* ChattingListTableViewController.swift */,
+				79319D2B1CF7FD6600B47559 /* MoreDetailTableViewController.swift */,
+				79319D2D1CF8355C00B47559 /* PeersListTableViewController.swift */,
+				79319D2F1CF8357500B47559 /* PeersTableViewCell.swift */,
 			);
 			path = "Muti-BLE";
 			sourceTree = "<group>";
@@ -209,9 +224,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				79C2ED2D1CD89DAC00E57BE7 /* ViewController.swift in Sources */,
+				79319D201CF7E31100B47559 /* ChattingListTableViewController.swift in Sources */,
+				79319D221CF7E5F500B47559 /* ChattingRoomTableViewCell.swift in Sources */,
+				79319D2C1CF7FD6600B47559 /* MoreDetailTableViewController.swift in Sources */,
+				79319D2E1CF8355C00B47559 /* PeersListTableViewController.swift in Sources */,
 				79C2ED2B1CD89DAC00E57BE7 /* AppDelegate.swift in Sources */,
+				79319D241CF7EF7400B47559 /* ScreenSize.swift in Sources */,
 				79B67A1B1CF2B4DA001D9415 /* BleChattingViewController.m in Sources */,
+				79319D301CF8357500B47559 /* PeersTableViewCell.swift in Sources */,
 				79C2ED3D1CD89E0300E57BE7 /* MultiConnectManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

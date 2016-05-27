@@ -17,15 +17,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
        
         guard let u = NSUserDefaults.standardUserDefaults().objectForKey("ChattingUUID") as? String else{
             let newUUID = NSUUID().UUIDString
+            let tinyUUId = newUUID.substringToIndex(newUUID.startIndex.advancedBy(5))
             NSUserDefaults.standardUserDefaults().setObject(newUUID, forKey: "ChattingUUID")
             return newUUID
         }
         return u
     }()
     
+    var chattingUserName:String {
+        get{
+            guard let name = NSUserDefaults.standardUserDefaults().objectForKey("chatingUserName") as? String else{
+                NSUserDefaults.standardUserDefaults().setObject(UIDevice.currentDevice().name, forKey: "chatingUserName")
+                let name = UIDevice.currentDevice().name
+                return name
+            }
+            return name
+        }
+    }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+
+        
         return true
     }
 
