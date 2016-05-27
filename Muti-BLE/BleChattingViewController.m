@@ -70,7 +70,7 @@
 
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
-    self.manager = nil;
+//    self.manager = nil;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -106,7 +106,8 @@
     _isSingleChatting = isSingleChatting;
     if (isSingleChatting){
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.title = self.charttingTarget;
+            NSString *title = [MultiConnectManager displayNameWithPeer:self.charttingTarget];
+            self.title = title;
             self.targetExist = _targetExist;
         });
         [self removeAll];
@@ -122,9 +123,11 @@
 
 -(void)setTargetExist:(bool)targetExist{
     _targetExist = targetExist;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.title = [NSString stringWithFormat:@"%@(已断开连接)",self.charttingTarget];
-    });
+    if (!_targetExist){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.title = [NSString stringWithFormat:@"%@(已断开连接)",[MultiConnectManager displayNameWithPeer:self.charttingTarget]];
+        });
+    }
 }
 
 -(void)removeAll{
@@ -146,7 +149,12 @@
     [self.messages addObject:newMessage];
     
 //    [self.manager sendNewMessage:text];
-    
+    if (!self.isSingleChatting){
+        [self.manager sendPublicImage:image];
+    }
+    else{
+        [self.manager sendPrivateImage:image target:self.charttingTarget];
+    }
     [self finishSendingMessageAnimated:YES];
 }
 
@@ -493,7 +501,57 @@
         [self.messages addObject:newMessage];
         [self finishReceivingMessageAnimated:YES];
     });
+}
 
+-(void)didMultiConnectReceivedPublicImage:(UIImage *)image displayName:(NSString *)displayName uuid:(NSString *)uuid{
+    if (self.isSingleChatting){
+        return;
+    }
+    
+    self.showTypingIndicator = !self.showTypingIndicator;
+    
+    [self scrollToBottomAnimated:YES];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        JSQMessage *newMessage = [[JSQMessage alloc] initWithSenderId:uuid
+//                                                    senderDisplayName:displayName
+//                                                                 date:[NSDate date]
+//                                                                 text:message];
+//        [JSQSystemSoundPlayer jsq_playMessageReceivedSound];
+//        [self.messages addObject:newMessage];
+//        [self finishReceivingMessageAnimated:YES];
+        id<JSQMessageMediaData> newMediaData = [[JSQPhotoMediaItem alloc]initWithImage:image];
+        JSQMessage *newMessage = [JSQMessage messageWithSenderId:uuid
+                                                     displayName:displayName
+                                                           media:newMediaData];
+        
+        [self.messages addObject:newMessage];
+        [self finishReceivingMessageAnimated:YES];
+    });
+}
+
+-(void)didMultiConnectReceivedPrivateImage:(UIImage *)image displayName:(NSString *)displayName uuid:(NSString *)uuid{
+    
+    self.showTypingIndicator = !self.showTypingIndicator;
+    
+    [self scrollToBottomAnimated:YES];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //        JSQMessage *newMessage = [[JSQMessage alloc] initWithSenderId:uuid
+        //                                                    senderDisplayName:displayName
+        //                                                                 date:[NSDate date]
+        //                                                                 text:message];
+        //        [JSQSystemSoundPlayer jsq_playMessageReceivedSound];
+        //        [self.messages addObject:newMessage];
+        //        [self finishReceivingMessageAnimated:YES];
+        id<JSQMessageMediaData> newMediaData = [[JSQPhotoMediaItem alloc]initWithImage:image];
+        JSQMessage *newMessage = [JSQMessage messageWithSenderId:uuid
+                                                     displayName:displayName
+                                                           media:newMediaData];
+        
+        [self.messages addObject:newMessage];
+        [self finishReceivingMessageAnimated:YES];
+    });
 }
 
 -(void)didMultiConnectPeerChangeState:(MCPeerID *)peer state:(MCSessionState)state{
@@ -529,6 +587,8 @@
         self.targetExist = exist;
     }
 }
+
+
 
 #pragma mark - image picker methods
 
@@ -589,17 +649,18 @@
 
 -(void)joinPivateChatting:(NSString *)target{
     self.charttingTarget = target;
+//    if (self.isSingleChatting){
+    bool exist = NO;
+    for (NSString *peer in self.manager.allPeers){
+        if ([peer isEqualToString:self.charttingTarget]){
+            exist = YES;
+        }
+    }
+    self.targetExist = exist;
+//    }
     self.isSingleChatting = YES;
     
-    if (self.isSingleChatting){
-        bool exist = NO;
-        for (NSString *peer in self.manager.allPeers){
-            if ([peer isEqualToString:self.charttingTarget]){
-                exist = YES;
-            }
-        }
-        self.targetExist = exist;
-    }
+    self.navigationItem.rightBarButtonItem = nil;
 }
 
 #pragma  mark - segue

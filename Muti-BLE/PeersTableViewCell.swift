@@ -22,7 +22,7 @@ class PeersTableViewCell: UITableViewCell {
         if peerName.characters.count > 0{
             self.displayLabel.text = peerName.substringToIndex(peerName.startIndex.advancedBy(1))
         }
-        self.peerNameLabel.text = peerName
+        self.peerNameLabel.text = MultiConnectManager.displayNameWithPeer(peerName)
     }
 
 }

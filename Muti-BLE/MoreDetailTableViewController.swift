@@ -65,6 +65,20 @@ class MoreDetailTableViewController: UITableViewController {
             
             self.presentViewController(alert, animated: true, completion: nil)
         }
+        else if indexPath.row == 1{
+            MBProgressHUD.showHUDAddedTo(self.tableView.superview!, animated: true)
+            
+//            NSUserDefaults.standardUserDefaults()
+//            sleep(1)
+            NSUserDefaults.standardUserDefaults().setObject(nil, forKey: "chatingUserName")
+            
+            
+            MBProgressHUD.hideHUDForView(self.tableView.superview!, animated: true)
+        }
+    }
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
     }
 
 }

@@ -28,8 +28,8 @@ extension MCSessionState {
     func didMultiConnectSendMessage(message:String)
     func didMultiConnectReceivedMessage(message:String,displayName:String,uuid:String)
     func didMultiConnectReceivedPrivateMessage(message:String,displayName:String,uuid:String)
-//    func didMultiConnectReceivedPublicImage(image:UIImage,displayName:String,uuid:String)
-//    func didMultiConnectReceivedPrivateImage(image:UIImage,displayName:String,uuid:String)
+    func didMultiConnectReceivedPublicImage(image:UIImage,displayName:String,uuid:String)
+    func didMultiConnectReceivedPrivateImage(image:UIImage,displayName:String,uuid:String)
     func didMultiConnectError(error:NSError)
     func didMultiConnectAlert(alert:String)
     func didMultiConnectSharePeersChanged(peers:[String])
@@ -142,6 +142,26 @@ class MultiConnectManager: NSObject {
         return "\(displayName)[ble]\(uuid)";
     }
 
+    class func displayNameWithPeer(peerDisplayName:String)->String{
+        var displayname = "guest"
+//        var uuid = "test"
+        let arr = peerDisplayName.componentsSeparatedByString("[ble]")
+        if arr.count == 2{
+            displayname = arr[0]
+//            uuid = arr[1]
+        }
+        return displayname
+    }
+    class func uuidWithPeer(peerDisplayName:String)->String{
+//        var displayname = "guest"
+        var uuid = "test"
+        let arr = peerDisplayName.componentsSeparatedByString("[ble]")
+        if arr.count == 2{
+//            displayname = arr[0]
+        uuid = arr[1]
+        }
+        return uuid
+    }
     
     func sendNewMessage(string:String){
         
@@ -367,6 +387,57 @@ extension MultiConnectManager : MCSessionDelegate {
             }
         }
 
+        let receiveImage = {(dict:NSDictionary,isPrivate:Bool) in
+            if let image = dict["image"] as? UIImage{
+                var displayname = "guest"
+                var uuid = "test"
+                let arr = peerID.displayName.componentsSeparatedByString("[ble]")
+                if arr.count == 2{
+                    displayname = arr[0]
+                    uuid = arr[1]
+                }
+                if !isPrivate{
+                    self.delegate?.didMultiConnectReceivedPublicImage(image, displayName: displayname, uuid: uuid)
+                }
+                else if let target = dict["target"] as? String{
+                    if target == self.myPeerId.displayName{
+                        self.delegate?.didMultiConnectReceivedPrivateImage(image, displayName: displayname, uuid: uuid)
+                        return
+                    }
+                }
+                var peersToRepost:[MCPeerID] = []
+                var peers:[String] = []
+                if let array = dict.objectForKey("peers") as? [String]{
+                    peers += array
+                    for connectPeer in self.session.connectedPeers{
+                        var exist = false
+                        for peer in array{
+                            if connectPeer.displayName == peer{
+                                exist = true
+                                break
+                            }
+                        }
+                        if !exist{
+                            peersToRepost.append(connectPeer)
+                            peers.append(connectPeer.displayName)
+                        }
+                    }
+                }
+                if peersToRepost.count != 0 {
+                    if !isPrivate{
+                        let toSend = ["image":image,"peers":peers]
+                        self.send(toSend, peers: peersToRepost,type: .PublicImage)
+                    }
+                    else{
+                        if let target = dict["target"] as? String{
+                            let toSend = ["image":image,"peers":peers,"target":target]
+                            self.send(toSend, peers: peersToRepost,type: .PrivateImage)
+                        }
+                    }
+                }
+            }
+        }
+        
         
         
         if let d:NSDictionary = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [String:AnyObject]{
@@ -378,9 +449,11 @@ extension MultiConnectManager : MCSessionDelegate {
                 receiveMessage(dict,true)
             }
             else if let dict:NSDictionary = d[MultiConnectSendType.PublicImage.typeName()] as? [String:AnyObject]{
-//                receiveMessage(dict,true)
+                receiveImage(dict,false)
             }
-
+            else if let dict:NSDictionary = d[MultiConnectSendType.PrivateImage.typeName()] as? [String:AnyObject]{
+                receiveImage(dict,true)
+            }
             
             else if let dict:NSDictionary = d[MultiConnectSendType.SharePeers.typeName()] as? [String:AnyObject]{
                 if let sharePeers = dict["share_peers"] as? [String]{
